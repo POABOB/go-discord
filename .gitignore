@@ -1,0 +1,4 @@
+**/prisma/db/
+*_gen.go
+**/.env
+**/.env.local**

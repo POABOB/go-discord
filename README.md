@@ -47,8 +47,9 @@ model Post {
 }
 ```
 
-4. create prisma/.env file for DATABASE_URL
+4. create .env file for DATABASE_URL
 
+`.env`
 ```
 DATABASE_URL='mysql://user:password@host:3306/db_name?sslaccept=strict'
 ```
@@ -61,9 +62,9 @@ $ go run github.com/steebchen/prisma-client-go db push
 $ go run github.com/steebchen/prisma-client-go generate
 ```
 
-6. create prisma/demo.go for test
+6. create demo.go for test
 
-`prisma/demo.go`
+`demo.go`
 ```go
 package main
  
