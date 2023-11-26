@@ -1,4 +1,0 @@
-Name: profile.rpc
-ListenOn: 0.0.0.0:8080
-
-DatabaseUrl: 'mysql://pylaftztngyy5b5o7ndv:pscale_pw_idKcM2pyTAOnFVJrTSBqy621NFPsMTWE2brwWLpTnc4@aws.connect.psdb.cloud:3306/discord-clone?sslaccept=strict'
