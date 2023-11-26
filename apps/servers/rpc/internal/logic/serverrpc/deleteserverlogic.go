@@ -24,7 +24,7 @@ func NewDeleteServerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Dele
 	}
 }
 
-func (l *DeleteServerLogic) DeleteServer(in *rpc.DeleteServerReq) (*rpc.Empty, error) {
+func (l *DeleteServerLogic) DeleteServer(in *rpc.DeleteServerReq) (*rpc.EmptyRes, error) {
 	ctx := context.Background()
 
 	// delete
@@ -33,8 +33,8 @@ func (l *DeleteServerLogic) DeleteServer(in *rpc.DeleteServerReq) (*rpc.Empty, e
 		db.Server.ProfileID.Equals(in.ProfileId),
 	).Delete().Exec(ctx)
 	if err != nil {
-		return &rpc.Empty{}, err
+		return nil, err
 	}
 
-	return &rpc.Empty{}, nil
+	return nil, nil
 }

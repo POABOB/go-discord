@@ -25,14 +25,14 @@ func NewPostServerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PostSe
 	}
 }
 
-func (l *PostServerLogic) PostServer(in *rpc.PostServerReq) (*rpc.Empty, error) {
+func (l *PostServerLogic) PostServer(in *rpc.PostServerReq) (*rpc.EmptyRes, error) {
 	ctx := context.Background()
 
 	// create
 	uid, err := uuid.NewUUID()
 	serverUuid, err := uuid.NewUUID()
 	if err != nil {
-		return &rpc.Empty{}, err
+		return nil, err
 	}
 	postServer := l.svcCtx.PrismaClient.Server.CreateOne(
 		db.Server.Name.Set(in.Name),
@@ -50,8 +50,8 @@ func (l *PostServerLogic) PostServer(in *rpc.PostServerReq) (*rpc.Empty, error) 
 		db.Member.Role.Set(db.MemberRoleADMIN),
 	).Tx()
 	if err := l.svcCtx.PrismaClient.Prisma.Transaction(postServer, postMember).Exec(ctx); err != nil {
-		return &rpc.Empty{}, err
+		return nil, err
 	}
 
-	return &rpc.Empty{}, nil
+	return nil, nil
 }

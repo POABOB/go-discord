@@ -16,7 +16,7 @@ type (
 	Channel         = rpc.Channel
 	DeleteMemberReq = rpc.DeleteMemberReq
 	DeleteServerReq = rpc.DeleteServerReq
-	Empty           = rpc.Empty
+	EmptyRes        = rpc.EmptyRes
 	GetServerReq    = rpc.GetServerReq
 	GetServerRes    = rpc.GetServerRes
 	GetServersReq   = rpc.GetServersReq
@@ -32,9 +32,9 @@ type (
 	ServerRpc interface {
 		GetServers(ctx context.Context, in *GetServersReq, opts ...grpc.CallOption) (*GetServersRes, error)
 		GetUniqueServer(ctx context.Context, in *GetServerReq, opts ...grpc.CallOption) (*GetServerRes, error)
-		PostServer(ctx context.Context, in *PostServerReq, opts ...grpc.CallOption) (*Empty, error)
-		PatchServer(ctx context.Context, in *PatchServerReq, opts ...grpc.CallOption) (*Empty, error)
-		DeleteServer(ctx context.Context, in *DeleteServerReq, opts ...grpc.CallOption) (*Empty, error)
+		PostServer(ctx context.Context, in *PostServerReq, opts ...grpc.CallOption) (*EmptyRes, error)
+		PatchServer(ctx context.Context, in *PatchServerReq, opts ...grpc.CallOption) (*EmptyRes, error)
+		DeleteServer(ctx context.Context, in *DeleteServerReq, opts ...grpc.CallOption) (*EmptyRes, error)
 	}
 
 	defaultServerRpc struct {
@@ -58,17 +58,17 @@ func (m *defaultServerRpc) GetUniqueServer(ctx context.Context, in *GetServerReq
 	return client.GetUniqueServer(ctx, in, opts...)
 }
 
-func (m *defaultServerRpc) PostServer(ctx context.Context, in *PostServerReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultServerRpc) PostServer(ctx context.Context, in *PostServerReq, opts ...grpc.CallOption) (*EmptyRes, error) {
 	client := rpc.NewServerRpcClient(m.cli.Conn())
 	return client.PostServer(ctx, in, opts...)
 }
 
-func (m *defaultServerRpc) PatchServer(ctx context.Context, in *PatchServerReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultServerRpc) PatchServer(ctx context.Context, in *PatchServerReq, opts ...grpc.CallOption) (*EmptyRes, error) {
 	client := rpc.NewServerRpcClient(m.cli.Conn())
 	return client.PatchServer(ctx, in, opts...)
 }
 
-func (m *defaultServerRpc) DeleteServer(ctx context.Context, in *DeleteServerReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultServerRpc) DeleteServer(ctx context.Context, in *DeleteServerReq, opts ...grpc.CallOption) (*EmptyRes, error) {
 	client := rpc.NewServerRpcClient(m.cli.Conn())
 	return client.DeleteServer(ctx, in, opts...)
 }

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.21.9
-// source: servers.proto
+// source: apps/servers/rpc/servers.proto
 
 package rpc
 
@@ -32,9 +32,9 @@ const (
 type ServerRpcClient interface {
 	GetServers(ctx context.Context, in *GetServersReq, opts ...grpc.CallOption) (*GetServersRes, error)
 	GetUniqueServer(ctx context.Context, in *GetServerReq, opts ...grpc.CallOption) (*GetServerRes, error)
-	PostServer(ctx context.Context, in *PostServerReq, opts ...grpc.CallOption) (*Empty, error)
-	PatchServer(ctx context.Context, in *PatchServerReq, opts ...grpc.CallOption) (*Empty, error)
-	DeleteServer(ctx context.Context, in *DeleteServerReq, opts ...grpc.CallOption) (*Empty, error)
+	PostServer(ctx context.Context, in *PostServerReq, opts ...grpc.CallOption) (*EmptyRes, error)
+	PatchServer(ctx context.Context, in *PatchServerReq, opts ...grpc.CallOption) (*EmptyRes, error)
+	DeleteServer(ctx context.Context, in *DeleteServerReq, opts ...grpc.CallOption) (*EmptyRes, error)
 }
 
 type serverRpcClient struct {
@@ -63,8 +63,8 @@ func (c *serverRpcClient) GetUniqueServer(ctx context.Context, in *GetServerReq,
 	return out, nil
 }
 
-func (c *serverRpcClient) PostServer(ctx context.Context, in *PostServerReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *serverRpcClient) PostServer(ctx context.Context, in *PostServerReq, opts ...grpc.CallOption) (*EmptyRes, error) {
+	out := new(EmptyRes)
 	err := c.cc.Invoke(ctx, ServerRpc_PostServer_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -72,8 +72,8 @@ func (c *serverRpcClient) PostServer(ctx context.Context, in *PostServerReq, opt
 	return out, nil
 }
 
-func (c *serverRpcClient) PatchServer(ctx context.Context, in *PatchServerReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *serverRpcClient) PatchServer(ctx context.Context, in *PatchServerReq, opts ...grpc.CallOption) (*EmptyRes, error) {
+	out := new(EmptyRes)
 	err := c.cc.Invoke(ctx, ServerRpc_PatchServer_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -81,8 +81,8 @@ func (c *serverRpcClient) PatchServer(ctx context.Context, in *PatchServerReq, o
 	return out, nil
 }
 
-func (c *serverRpcClient) DeleteServer(ctx context.Context, in *DeleteServerReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *serverRpcClient) DeleteServer(ctx context.Context, in *DeleteServerReq, opts ...grpc.CallOption) (*EmptyRes, error) {
+	out := new(EmptyRes)
 	err := c.cc.Invoke(ctx, ServerRpc_DeleteServer_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -96,9 +96,9 @@ func (c *serverRpcClient) DeleteServer(ctx context.Context, in *DeleteServerReq,
 type ServerRpcServer interface {
 	GetServers(context.Context, *GetServersReq) (*GetServersRes, error)
 	GetUniqueServer(context.Context, *GetServerReq) (*GetServerRes, error)
-	PostServer(context.Context, *PostServerReq) (*Empty, error)
-	PatchServer(context.Context, *PatchServerReq) (*Empty, error)
-	DeleteServer(context.Context, *DeleteServerReq) (*Empty, error)
+	PostServer(context.Context, *PostServerReq) (*EmptyRes, error)
+	PatchServer(context.Context, *PatchServerReq) (*EmptyRes, error)
+	DeleteServer(context.Context, *DeleteServerReq) (*EmptyRes, error)
 	mustEmbedUnimplementedServerRpcServer()
 }
 
@@ -112,13 +112,13 @@ func (UnimplementedServerRpcServer) GetServers(context.Context, *GetServersReq) 
 func (UnimplementedServerRpcServer) GetUniqueServer(context.Context, *GetServerReq) (*GetServerRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUniqueServer not implemented")
 }
-func (UnimplementedServerRpcServer) PostServer(context.Context, *PostServerReq) (*Empty, error) {
+func (UnimplementedServerRpcServer) PostServer(context.Context, *PostServerReq) (*EmptyRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PostServer not implemented")
 }
-func (UnimplementedServerRpcServer) PatchServer(context.Context, *PatchServerReq) (*Empty, error) {
+func (UnimplementedServerRpcServer) PatchServer(context.Context, *PatchServerReq) (*EmptyRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PatchServer not implemented")
 }
-func (UnimplementedServerRpcServer) DeleteServer(context.Context, *DeleteServerReq) (*Empty, error) {
+func (UnimplementedServerRpcServer) DeleteServer(context.Context, *DeleteServerReq) (*EmptyRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteServer not implemented")
 }
 func (UnimplementedServerRpcServer) mustEmbedUnimplementedServerRpcServer() {}
@@ -253,7 +253,7 @@ var ServerRpc_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "servers.proto",
+	Metadata: "apps/servers/rpc/servers.proto",
 }
 
 const (
@@ -417,5 +417,5 @@ var MemberRpc_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "servers.proto",
+	Metadata: "apps/servers/rpc/servers.proto",
 }

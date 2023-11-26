@@ -3,7 +3,7 @@ syntax = "proto3";
 package serversRPC;
 option go_package="./rpc";
 
-import "google/protobuf/any.proto";
+import "pb/empty.proto";
 
 message Server {
   string Id = 1;
@@ -12,7 +12,6 @@ message Server {
   string InviteCode = 4;
   string ProfileId = 5;
 }
-
 
 message Member {
   string Id = 1;
@@ -78,15 +77,16 @@ message DeleteServerReq {
   string ProfileId = 2;
 }
 
-message Empty {}
+message EmptyRes {
+  google.protobuf.Empty empty = 1;
+}
 
 service ServerRpc {
   rpc GetServers(GetServersReq) returns (GetServersRes);
   rpc GetUniqueServer(GetServerReq) returns (GetServerRes);
-  rpc PostServer(PostServerReq) returns (Empty);
-  rpc PatchServer(PatchServerReq) returns (Empty);
-  rpc DeleteServer(DeleteServerReq) returns (Empty);
-
+  rpc PostServer(PostServerReq) returns (EmptyRes);
+  rpc PatchServer(PatchServerReq) returns (EmptyRes);
+  rpc DeleteServer(DeleteServerReq) returns (EmptyRes);
 }
 
 message InviteMemberReq {

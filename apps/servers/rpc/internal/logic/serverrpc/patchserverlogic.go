@@ -24,7 +24,7 @@ func NewPatchServerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Patch
 	}
 }
 
-func (l *PatchServerLogic) PatchServer(in *rpc.PatchServerReq) (*rpc.Empty, error) {
+func (l *PatchServerLogic) PatchServer(in *rpc.PatchServerReq) (*rpc.EmptyRes, error) {
 	ctx := context.Background()
 
 	// patch
@@ -39,8 +39,8 @@ func (l *PatchServerLogic) PatchServer(in *rpc.PatchServerReq) (*rpc.Empty, erro
 			db.Server.InviteCode.Set(in.InviteCode),
 		).Exec(ctx)
 	if err != nil {
-		return &rpc.Empty{}, err
+		return nil, err
 	}
 
-	return &rpc.Empty{}, nil
+	return nil, nil
 }

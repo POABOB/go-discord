@@ -16,7 +16,7 @@ type (
 	Channel         = rpc.Channel
 	DeleteMemberReq = rpc.DeleteMemberReq
 	DeleteServerReq = rpc.DeleteServerReq
-	Empty           = rpc.Empty
+	EmptyRes        = rpc.EmptyRes
 	GetServerReq    = rpc.GetServerReq
 	GetServerRes    = rpc.GetServerRes
 	GetServersReq   = rpc.GetServersReq

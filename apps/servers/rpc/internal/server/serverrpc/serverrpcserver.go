@@ -32,17 +32,17 @@ func (s *ServerRpcServer) GetUniqueServer(ctx context.Context, in *rpc.GetServer
 	return l.GetUniqueServer(in)
 }
 
-func (s *ServerRpcServer) PostServer(ctx context.Context, in *rpc.PostServerReq) (*rpc.Empty, error) {
+func (s *ServerRpcServer) PostServer(ctx context.Context, in *rpc.PostServerReq) (*rpc.EmptyRes, error) {
 	l := serverrpclogic.NewPostServerLogic(ctx, s.svcCtx)
 	return l.PostServer(in)
 }
 
-func (s *ServerRpcServer) PatchServer(ctx context.Context, in *rpc.PatchServerReq) (*rpc.Empty, error) {
+func (s *ServerRpcServer) PatchServer(ctx context.Context, in *rpc.PatchServerReq) (*rpc.EmptyRes, error) {
 	l := serverrpclogic.NewPatchServerLogic(ctx, s.svcCtx)
 	return l.PatchServer(in)
 }
 
-func (s *ServerRpcServer) DeleteServer(ctx context.Context, in *rpc.DeleteServerReq) (*rpc.Empty, error) {
+func (s *ServerRpcServer) DeleteServer(ctx context.Context, in *rpc.DeleteServerReq) (*rpc.EmptyRes, error) {
 	l := serverrpclogic.NewDeleteServerLogic(ctx, s.svcCtx)
 	return l.DeleteServer(in)
 }
