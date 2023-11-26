@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package serversRPC;
+option go_package="./rpc";
+
+import "google/protobuf/any.proto";
+
+message Server {
+  string Id = 1;
+  string Name = 2;
+  string ImageUrl = 3;
+  string InviteCode = 4;
+  string ProfileId = 5;
+}
+
+
+message Member {
+  string Id = 1;
+  string role = 2;
+  string ProfileId = 3;
+  string Name = 4;
+  string ImageUrl = 5;
+  string Email = 6;
+}
+
+message Channel {
+  string Id = 1;
+  string Name = 2;
+  string type = 3;
+  string ProfileId = 4;
+  string serverId = 5;
+}
+
+message Relation {
+  repeated Member Members = 1;
+  repeated Channel Channels = 2;
+}
+
+message GetServersReq {
+  optional string Id = 1;
+  optional string ProfileId = 2;
+  optional string Name = 3;
+  optional string InviteCode = 4;
+  int32 Page = 5;
+  int32 PagePerNum = 6;
+}
+
+message GetServerReq {
+  string Id = 1;
+  string ProfileId = 2;
+}
+
+message GetServerRes {
+  Server server = 1;
+  Relation relation = 2;
+}
+
+message GetServersRes {
+  repeated Server servers = 1;
+}
+
+message PostServerReq {
+  string Name = 1;
+  string ImageUrl = 2;
+  string ProfileId = 3;
+}
+
+message PatchServerReq {
+  string Id = 1;
+  string Name = 2;
+  string ImageUrl = 3;
+  string InviteCode = 4;
+  string ProfileId = 5;
+}
+
+message DeleteServerReq {
+  string Id = 1;
+  string ProfileId = 2;
+}
+
+message Empty {}
+
+service ServerRpc {
+  rpc GetServers(GetServersReq) returns (GetServersRes);
+  rpc GetUniqueServer(GetServerReq) returns (GetServerRes);
+  rpc PostServer(PostServerReq) returns (Empty);
+  rpc PatchServer(PatchServerReq) returns (Empty);
+  rpc DeleteServer(DeleteServerReq) returns (Empty);
+
+}
+
+message InviteMemberReq {
+  string ProfileId = 1;
+  string InviteCode = 2;
+}
+
+message PatchMemberReq {
+  string Id = 1;
+  string ServerId = 2;
+  string ProfileId = 3;
+  string role = 4;
+}
+
+message DeleteMemberReq {
+  string Id = 1;
+  string ServerId = 2;
+  string ProfileId = 3;
+}
+
+service MemberRpc {
+  rpc InviteMember(InviteMemberReq) returns (GetServerRes);
+  rpc PatchMember(PatchMemberReq) returns (GetServerRes);
+  rpc DeleteMember(DeleteMemberReq) returns (GetServerRes);
+}
