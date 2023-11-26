@@ -3,4 +3,4 @@
 **/.env
 **/.env.local**
 
-**/etc/*.yaml
+./apps/**/**/etc/*.yaml
