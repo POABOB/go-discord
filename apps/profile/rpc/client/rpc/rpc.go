@@ -14,15 +14,15 @@ import (
 
 type (
 	DeleteProfileReq            = rpc.DeleteProfileReq
-	Empty                       = rpc.Empty
+	EmptyRes                    = rpc.EmptyRes
 	GetUniqueProfileOrCreateReq = rpc.GetUniqueProfileOrCreateReq
 	GetUniqueProfileOrCreateRes = rpc.GetUniqueProfileOrCreateRes
 	PatchProfileReq             = rpc.PatchProfileReq
 
 	Rpc interface {
 		GetUniqueProfileOrCreate(ctx context.Context, in *GetUniqueProfileOrCreateReq, opts ...grpc.CallOption) (*GetUniqueProfileOrCreateRes, error)
-		PatchProfile(ctx context.Context, in *PatchProfileReq, opts ...grpc.CallOption) (*Empty, error)
-		DeleteProfile(ctx context.Context, in *DeleteProfileReq, opts ...grpc.CallOption) (*Empty, error)
+		PatchProfile(ctx context.Context, in *PatchProfileReq, opts ...grpc.CallOption) (*EmptyRes, error)
+		DeleteProfile(ctx context.Context, in *DeleteProfileReq, opts ...grpc.CallOption) (*EmptyRes, error)
 	}
 
 	defaultRpc struct {
@@ -41,12 +41,12 @@ func (m *defaultRpc) GetUniqueProfileOrCreate(ctx context.Context, in *GetUnique
 	return client.GetUniqueProfileOrCreate(ctx, in, opts...)
 }
 
-func (m *defaultRpc) PatchProfile(ctx context.Context, in *PatchProfileReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultRpc) PatchProfile(ctx context.Context, in *PatchProfileReq, opts ...grpc.CallOption) (*EmptyRes, error) {
 	client := rpc.NewRpcClient(m.cli.Conn())
 	return client.PatchProfile(ctx, in, opts...)
 }
 
-func (m *defaultRpc) DeleteProfile(ctx context.Context, in *DeleteProfileReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultRpc) DeleteProfile(ctx context.Context, in *DeleteProfileReq, opts ...grpc.CallOption) (*EmptyRes, error) {
 	client := rpc.NewRpcClient(m.cli.Conn())
 	return client.DeleteProfile(ctx, in, opts...)
 }

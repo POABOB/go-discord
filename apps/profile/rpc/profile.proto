@@ -3,6 +3,8 @@ syntax = "proto3";
 package profileRPC;
 option go_package="./rpc";
 
+import "pb/empty.proto";
+
 message GetUniqueProfileOrCreateReq { 
   string UserId = 1; 
   string Name = 2;
@@ -30,11 +32,13 @@ message DeleteProfileReq {
   string Id = 1;
 }
 
-message Empty {}
+message EmptyRes{
+  google.protobuf.Empty empty = 1;
+}
 
 service Rpc {
   rpc GetUniqueProfileOrCreate(GetUniqueProfileOrCreateReq)
       returns (GetUniqueProfileOrCreateRes);
-  rpc PatchProfile(PatchProfileReq) returns (Empty);
-  rpc DeleteProfile(DeleteProfileReq) returns (Empty);
+  rpc PatchProfile(PatchProfileReq) returns (EmptyRes);
+  rpc DeleteProfile(DeleteProfileReq) returns (EmptyRes);
 }

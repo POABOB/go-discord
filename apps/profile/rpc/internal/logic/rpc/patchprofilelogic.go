@@ -24,7 +24,7 @@ func NewPatchProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Patc
 	}
 }
 
-func (l *PatchProfileLogic) PatchProfile(in *rpc.PatchProfileReq) (*rpc.Empty, error) {
+func (l *PatchProfileLogic) PatchProfile(in *rpc.PatchProfileReq) (*rpc.EmptyRes, error) {
 	ctx := context.Background()
 
 	// patch
@@ -36,8 +36,8 @@ func (l *PatchProfileLogic) PatchProfile(in *rpc.PatchProfileReq) (*rpc.Empty, e
 			db.Profile.ImageURL.Set(in.ImageUrl),
 		).Exec(ctx)
 	if err != nil {
-		return &rpc.Empty{}, err
+		return nil, err
 	}
 
-	return &rpc.Empty{}, nil
+	return nil, nil
 }

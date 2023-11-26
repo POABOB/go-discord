@@ -24,14 +24,14 @@ func NewDeleteProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 	}
 }
 
-func (l *DeleteProfileLogic) DeleteProfile(in *rpc.DeleteProfileReq) (*rpc.Empty, error) {
+func (l *DeleteProfileLogic) DeleteProfile(in *rpc.DeleteProfileReq) (*rpc.EmptyRes, error) {
 	ctx := context.Background()
 
 	// delete
 	_, err := l.svcCtx.PrismaClient.Profile.FindUnique(db.Profile.ID.Equals(in.Id)).Delete().Exec(ctx)
 	if err != nil {
-		return &rpc.Empty{}, err
+		return nil, err
 	}
 
-	return &rpc.Empty{}, nil
+	return nil, nil
 }

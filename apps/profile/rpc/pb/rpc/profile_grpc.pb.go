@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.21.9
-// source: profile.proto
+// source: apps/profile/rpc/profile.proto
 
 package rpc
 
@@ -29,8 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RpcClient interface {
 	GetUniqueProfileOrCreate(ctx context.Context, in *GetUniqueProfileOrCreateReq, opts ...grpc.CallOption) (*GetUniqueProfileOrCreateRes, error)
-	PatchProfile(ctx context.Context, in *PatchProfileReq, opts ...grpc.CallOption) (*Empty, error)
-	DeleteProfile(ctx context.Context, in *DeleteProfileReq, opts ...grpc.CallOption) (*Empty, error)
+	PatchProfile(ctx context.Context, in *PatchProfileReq, opts ...grpc.CallOption) (*EmptyRes, error)
+	DeleteProfile(ctx context.Context, in *DeleteProfileReq, opts ...grpc.CallOption) (*EmptyRes, error)
 }
 
 type rpcClient struct {
@@ -50,8 +50,8 @@ func (c *rpcClient) GetUniqueProfileOrCreate(ctx context.Context, in *GetUniqueP
 	return out, nil
 }
 
-func (c *rpcClient) PatchProfile(ctx context.Context, in *PatchProfileReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *rpcClient) PatchProfile(ctx context.Context, in *PatchProfileReq, opts ...grpc.CallOption) (*EmptyRes, error) {
+	out := new(EmptyRes)
 	err := c.cc.Invoke(ctx, Rpc_PatchProfile_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -59,8 +59,8 @@ func (c *rpcClient) PatchProfile(ctx context.Context, in *PatchProfileReq, opts 
 	return out, nil
 }
 
-func (c *rpcClient) DeleteProfile(ctx context.Context, in *DeleteProfileReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *rpcClient) DeleteProfile(ctx context.Context, in *DeleteProfileReq, opts ...grpc.CallOption) (*EmptyRes, error) {
+	out := new(EmptyRes)
 	err := c.cc.Invoke(ctx, Rpc_DeleteProfile_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -73,8 +73,8 @@ func (c *rpcClient) DeleteProfile(ctx context.Context, in *DeleteProfileReq, opt
 // for forward compatibility
 type RpcServer interface {
 	GetUniqueProfileOrCreate(context.Context, *GetUniqueProfileOrCreateReq) (*GetUniqueProfileOrCreateRes, error)
-	PatchProfile(context.Context, *PatchProfileReq) (*Empty, error)
-	DeleteProfile(context.Context, *DeleteProfileReq) (*Empty, error)
+	PatchProfile(context.Context, *PatchProfileReq) (*EmptyRes, error)
+	DeleteProfile(context.Context, *DeleteProfileReq) (*EmptyRes, error)
 	mustEmbedUnimplementedRpcServer()
 }
 
@@ -85,10 +85,10 @@ type UnimplementedRpcServer struct {
 func (UnimplementedRpcServer) GetUniqueProfileOrCreate(context.Context, *GetUniqueProfileOrCreateReq) (*GetUniqueProfileOrCreateRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUniqueProfileOrCreate not implemented")
 }
-func (UnimplementedRpcServer) PatchProfile(context.Context, *PatchProfileReq) (*Empty, error) {
+func (UnimplementedRpcServer) PatchProfile(context.Context, *PatchProfileReq) (*EmptyRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PatchProfile not implemented")
 }
-func (UnimplementedRpcServer) DeleteProfile(context.Context, *DeleteProfileReq) (*Empty, error) {
+func (UnimplementedRpcServer) DeleteProfile(context.Context, *DeleteProfileReq) (*EmptyRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteProfile not implemented")
 }
 func (UnimplementedRpcServer) mustEmbedUnimplementedRpcServer() {}
@@ -179,5 +179,5 @@ var Rpc_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "profile.proto",
+	Metadata: "apps/profile/rpc/profile.proto",
 }

@@ -27,12 +27,12 @@ func (s *RpcServer) GetUniqueProfileOrCreate(ctx context.Context, in *rpc.GetUni
 	return l.GetUniqueProfileOrCreate(in)
 }
 
-func (s *RpcServer) PatchProfile(ctx context.Context, in *rpc.PatchProfileReq) (*rpc.Empty, error) {
+func (s *RpcServer) PatchProfile(ctx context.Context, in *rpc.PatchProfileReq) (*rpc.EmptyRes, error) {
 	l := rpclogic.NewPatchProfileLogic(ctx, s.svcCtx)
 	return l.PatchProfile(in)
 }
 
-func (s *RpcServer) DeleteProfile(ctx context.Context, in *rpc.DeleteProfileReq) (*rpc.Empty, error) {
+func (s *RpcServer) DeleteProfile(ctx context.Context, in *rpc.DeleteProfileReq) (*rpc.EmptyRes, error) {
 	l := rpclogic.NewDeleteProfileLogic(ctx, s.svcCtx)
 	return l.DeleteProfile(in)
 }
