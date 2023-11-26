@@ -4,6 +4,7 @@ import (
 	"context"
 	serverRPC "github.com/POABOB/go-discord/apps/servers/rpc/pb/rpc"
 	"github.com/jinzhu/copier"
+	"google.golang.org/grpc/status"
 
 	"github.com/POABOB/go-discord/apps/app/api/internal/svc"
 	"github.com/POABOB/go-discord/apps/app/api/internal/types"
@@ -25,25 +26,24 @@ func NewGetUniqueServerLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 	}
 }
 
-func (l *GetUniqueServerLogic) GetUniqueServer(req *types.GetServerReq) (resp *types.GetServerRes, err error) {
-	var temp *serverRPC.GetServerRes
-	temp, err = l.svcCtx.Server.GetUniqueServer(l.ctx, &serverRPC.GetServerReq{
+func (l *GetUniqueServerLogic) GetUniqueServer(req *types.GetServerReq) (*types.GetServerRes, error) {
+	temp, err := l.svcCtx.Server.GetUniqueServer(l.ctx, &serverRPC.GetServerReq{
 		Id:        req.ServerId,
 		ProfileId: l.ctx.Value("id").(string),
 	})
 	if err != nil {
-		return
+		return nil, status.Error(400, err.Error())
 	}
-	resp = new(types.GetServerRes)
+
+	resp := &types.GetServerRes{}
 	if err = copier.Copy(&resp, &temp.Server); err != nil {
-		return
+		return nil, status.Error(500, err.Error())
 	}
 	if err = copier.Copy(&resp.Members, &temp.Relation.Members); err != nil {
-		return
+		return nil, status.Error(500, err.Error())
 	}
 	if err = copier.Copy(&resp.Channels, &temp.Relation.Channels); err != nil {
-		return
+		return nil, status.Error(500, err.Error())
 	}
-	//fmt.Println(temp.Relation.Members)
-	return
+	return resp, nil
 }

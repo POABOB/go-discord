@@ -4,6 +4,7 @@ import (
 	"context"
 	profileRPC "github.com/POABOB/go-discord/apps/profile/rpc/pb/rpc"
 	"github.com/golang-jwt/jwt/v4"
+	"google.golang.org/grpc/status"
 	"time"
 
 	"github.com/POABOB/go-discord/apps/app/api/internal/svc"
@@ -29,7 +30,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 func (l *LoginLogic) Login(req *types.LoginReq) (*types.LoginRes, error) {
 	claims, err := l.svcCtx.Clerk.DecodeToken(req.Token)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(400, err.Error())
 	}
 
 	// Call RPC
@@ -41,12 +42,12 @@ func (l *LoginLogic) Login(req *types.LoginReq) (*types.LoginRes, error) {
 		Email:    myClaim["email"].(string),
 	})
 	if err != nil {
-		return nil, err
+		return nil, status.Error(500, err.Error())
 	}
 
 	jwtToken, err := l.getJwtToken(l.svcCtx.Config.Auth.AccessSecret, time.Now().Unix(), l.svcCtx.Config.Auth.AccessExpire, temp.Id, myClaim)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(500, err.Error())
 	}
 
 	return &types.LoginRes{Id: temp.Id, Token: jwtToken}, nil

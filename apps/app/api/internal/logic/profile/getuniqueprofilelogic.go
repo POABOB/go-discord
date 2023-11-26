@@ -21,13 +21,13 @@ func NewGetUniqueProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *GetUniqueProfileLogic) GetUniqueProfile() (resp *types.GetUniqueProfileRes, err error) {
-	resp = &types.GetUniqueProfileRes{
+func (l *GetUniqueProfileLogic) GetUniqueProfile() (*types.GetUniqueProfileRes, error) {
+	resp := &types.GetUniqueProfileRes{
 		Id:       l.ctx.Value("id").(string),
 		UserId:   l.ctx.Value("userId").(string),
 		Name:     l.ctx.Value("name").(string),
 		ImageUrl: l.ctx.Value("imageUrl").(string),
 		Email:    l.ctx.Value("email").(string),
 	}
-	return
+	return resp, nil
 }

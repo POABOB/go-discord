@@ -4,6 +4,7 @@ import (
 	"context"
 	serverRPC "github.com/POABOB/go-discord/apps/servers/rpc/pb/rpc"
 	"github.com/jinzhu/copier"
+	"google.golang.org/grpc/status"
 
 	"github.com/POABOB/go-discord/apps/app/api/internal/svc"
 	"github.com/POABOB/go-discord/apps/app/api/internal/types"
@@ -25,28 +26,26 @@ func NewPatchMemberLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Patch
 	}
 }
 
-func (l *PatchMemberLogic) PatchMember(req *types.PatchMemberReq) (resp *types.GetServerRes, err error) {
-	var temp *serverRPC.GetServerRes
-
-	temp, err = l.svcCtx.Member.PatchMember(l.ctx, &serverRPC.PatchMemberReq{
+func (l *PatchMemberLogic) PatchMember(req *types.PatchMemberReq) (*types.GetServerRes, error) {
+	temp, err := l.svcCtx.Member.PatchMember(l.ctx, &serverRPC.PatchMemberReq{
 		Id:        req.Id,
 		ServerId:  req.ServerId,
 		ProfileId: req.ProfileId,
 		Role:      req.Role,
 	})
 	if err != nil {
-		return
+		return nil, status.Error(400, err.Error())
 	}
-	resp = &types.GetServerRes{}
+
+	resp := &types.GetServerRes{}
 	if err = copier.Copy(&resp, &temp.Server); err != nil {
-		return
+		return nil, status.Error(500, err.Error())
 	}
 	if err = copier.Copy(&resp.Members, &temp.Relation.Members); err != nil {
-		return
+		return nil, status.Error(500, err.Error())
 	}
 	if err = copier.Copy(&resp.Channels, &temp.Relation.Channels); err != nil {
-		return
+		return nil, status.Error(500, err.Error())
 	}
-	//fmt.Println(temp.Relation.Members)
-	return
+	return resp, nil
 }

@@ -2,8 +2,8 @@ package profile
 
 import (
 	"context"
-	"errors"
 	profileRPC "github.com/POABOB/go-discord/apps/profile/rpc/pb/rpc"
+	"google.golang.org/grpc/status"
 
 	"github.com/POABOB/go-discord/apps/app/api/internal/svc"
 	"github.com/POABOB/go-discord/apps/app/api/internal/types"
@@ -28,7 +28,7 @@ func NewPatchProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Patc
 func (l *PatchProfileLogic) PatchProfile(req *types.PatchProfileReq) error {
 	payloadId := l.ctx.Value("id").(string)
 	if req.Id != payloadId {
-		return errors.New("cannot patch other profile")
+		return status.Error(403, "cannot patch other profile")
 	}
 
 	// Call RPC
@@ -38,7 +38,7 @@ func (l *PatchProfileLogic) PatchProfile(req *types.PatchProfileReq) error {
 		Email:    req.Email,
 		ImageUrl: req.ImageUrl,
 	}); err != nil {
-		return err
+		return status.Error(400, err.Error())
 	}
 
 	return nil

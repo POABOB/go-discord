@@ -4,6 +4,7 @@ import (
 	"context"
 	serverRPC "github.com/POABOB/go-discord/apps/servers/rpc/pb/rpc"
 	"github.com/jinzhu/copier"
+	"google.golang.org/grpc/status"
 
 	"github.com/POABOB/go-discord/apps/app/api/internal/svc"
 	"github.com/POABOB/go-discord/apps/app/api/internal/types"
@@ -25,19 +26,18 @@ func NewInviteMemberLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Invi
 	}
 }
 
-func (l *InviteMemberLogic) InviteMember(req *types.InviteMemberReq) (resp *types.GetServerRes, err error) {
-	var temp *serverRPC.GetServerRes
-
-	temp, err = l.svcCtx.Member.InviteMember(l.ctx, &serverRPC.InviteMemberReq{
+func (l *InviteMemberLogic) InviteMember(req *types.InviteMemberReq) (*types.GetServerRes, error) {
+	temp, err := l.svcCtx.Member.InviteMember(l.ctx, &serverRPC.InviteMemberReq{
 		ProfileId:  l.ctx.Value("id").(string),
 		InviteCode: req.InviteCode,
 	})
 	if err != nil {
-		return
+		return nil, status.Error(400, err.Error())
 	}
-	resp = &types.GetServerRes{}
+
+	resp := &types.GetServerRes{}
 	if err = copier.Copy(&resp, &temp.Server); err != nil {
-		return
+		return nil, status.Error(500, err.Error())
 	}
-	return
+	return resp, nil
 }

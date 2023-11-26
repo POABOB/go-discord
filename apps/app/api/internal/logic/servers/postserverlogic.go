@@ -3,6 +3,7 @@ package servers
 import (
 	"context"
 	serverRPC "github.com/POABOB/go-discord/apps/servers/rpc/pb/rpc"
+	"google.golang.org/grpc/status"
 
 	"github.com/POABOB/go-discord/apps/app/api/internal/svc"
 	"github.com/POABOB/go-discord/apps/app/api/internal/types"
@@ -33,7 +34,7 @@ func (l *PostServerLogic) PostServer(req *types.PostServerReq) error {
 		ImageUrl:  req.ImageUrl,
 		ProfileId: profileId,
 	}); err != nil {
-		return err
+		return status.Error(400, err.Error())
 	}
 
 	return nil

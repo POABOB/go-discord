@@ -2,10 +2,10 @@ package profile
 
 import (
 	"context"
-	"errors"
 	"github.com/POABOB/go-discord/apps/app/api/internal/svc"
 	"github.com/POABOB/go-discord/apps/app/api/internal/types"
 	profileRPC "github.com/POABOB/go-discord/apps/profile/rpc/pb/rpc"
+	"google.golang.org/grpc/status"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,12 +27,12 @@ func NewDeleteProfileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Del
 func (l *DeleteProfileLogic) DeleteProfile(req *types.DeleteProfileReq) error {
 	payloadId := l.ctx.Value("id").(string)
 	if req.Id != payloadId {
-		return errors.New("cannot delete other profile")
+		return status.Error(403, "cannot delete other profile")
 	}
 
 	// Call RPC
 	if _, err := l.svcCtx.Profile.DeleteProfile(l.ctx, &profileRPC.DeleteProfileReq{Id: payloadId}); err != nil {
-		return err
+		return status.Error(400, err.Error())
 	}
 
 	return nil

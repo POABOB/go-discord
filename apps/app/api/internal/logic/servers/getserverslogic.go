@@ -4,6 +4,7 @@ import (
 	"context"
 	serverRPC "github.com/POABOB/go-discord/apps/servers/rpc/pb/rpc"
 	"github.com/jinzhu/copier"
+	"google.golang.org/grpc/status"
 
 	"github.com/POABOB/go-discord/apps/app/api/internal/svc"
 	"github.com/POABOB/go-discord/apps/app/api/internal/types"
@@ -25,8 +26,7 @@ func NewGetServersLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetSer
 	}
 }
 
-func (l *GetServersLogic) GetServers(req *types.GetServersReq) (resp []types.GetServerRes, err error) {
-	var temp *serverRPC.GetServersRes
+func (l *GetServersLogic) GetServers(req *types.GetServersReq) ([]types.GetServerRes, error) {
 	if req.Page == 0 {
 		req.Page = 1
 	}
@@ -35,15 +35,18 @@ func (l *GetServersLogic) GetServers(req *types.GetServersReq) (resp []types.Get
 	}
 
 	var rpcReq serverRPC.GetServersReq
-	if err = copier.Copy(&rpcReq, &req); err != nil {
-		return
+	if err := copier.Copy(&rpcReq, &req); err != nil {
+		return nil, status.Error(500, err.Error())
 	}
-	temp, err = l.svcCtx.Server.GetServers(l.ctx, &rpcReq)
+
+	temp, err := l.svcCtx.Server.GetServers(l.ctx, &rpcReq)
 	if err != nil {
-		return
+		return nil, status.Error(400, err.Error())
 	}
+
+	resp := make([]types.GetServerRes, 0)
 	if err = copier.Copy(&resp, &temp.Servers); err != nil {
-		return
+		return nil, status.Error(500, err.Error())
 	}
-	return
+	return resp, nil
 }
