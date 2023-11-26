@@ -2,3 +2,5 @@
 *_gen.go
 **/.env
 **/.env.local**
+
+**/etc/*.yaml
