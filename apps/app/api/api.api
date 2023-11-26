@@ -1,0 +1,173 @@
+syntax = "v1"
+
+type (
+	// 登入 (沒有使用者就新增)
+	LoginReq {
+		Token string `json:"token"`
+	}
+	// Res
+	LoginRes {
+		Id    string `json:"id"`
+		Token string `json:"token"`
+	}
+)
+
+// 定義 HTTP
+// @servers 控制對 HTTP 的 metadata，目前支援功能如下：
+// 1. 路由分組
+// 2. 中間件聲明
+// 3. 路由前綴
+// 4. 超時設定
+// 5. jwt 鑒權
+@server (
+	group: auth
+	prefix: /api/v1
+)
+service api {
+	@handler Login
+	post /login  (LoginReq) returns (LoginRes)
+}
+
+type (
+	// 獲取唯一使用者
+	GetUniqueProfileRes {
+		Id       string `json:"id"`
+		UserId   string `json:"userId"`
+		Name     string `json:"name"`
+		ImageUrl string `json:"imageUrl"`
+		Email    string `json:"email"`
+	}
+
+	// 更新使用者
+	PatchProfileReq {
+		Id       string `json:"id"`
+		Name     string `json:"name"`
+		ImageUrl string `json:"imageUrl"`
+		Email    string `json:"email"`
+	}
+
+	// 刪除使用者
+	DeleteProfileReq {
+		Id string `json:"id"`
+	}
+)
+
+// 定義微服務 profile
+@server (
+	// 當前 service 所產生檔案都會放置到 profile
+	group: profile
+	// 前綴 "/api/v1"
+	prefix: /api/v1
+	jwt: Auth
+)
+service api {
+	@handler GetUniqueProfile
+	get /profile  () returns (GetUniqueProfileRes)
+	//	@handler PostProfile
+	//	post /profile  (GetUniqueProfileOrCreateReq) returns (GetUniqueProfileOrCreateRes)
+	@handler PatchProfile
+	put /profile  (PatchProfileReq) returns ()
+	@handler DeleteProfile
+	delete /profile  (DeleteProfileReq) returns ()
+}
+
+type (
+	GetServersReq {
+		Id         string `form:"id,optional"`
+		ProfileId  string `form:"profileId,optional"`
+		Name       string `form:"name,optional"`
+		InviteCode string `form:"inviteCode,optional"`
+		Page       int    `form:"page,optional"`
+		PagePerNum int    `form:"pagePerNum,optional"`
+	}
+	GetServerReq {
+		ServerId string `path:"serverId"`
+	}
+	ServerMember {
+		Id        string `json:"id"`
+		Role      string `json:"role"`
+		ProfileId string `json:"profileId"`
+		Name      string `json:"name"`
+		ImageUrl  string `json:"imageUrl"`
+		Email     string `json:"email"`
+	}
+	ServerChannel {
+		Id       string `json:"id"`
+		Type     string `json:"type"`
+		ServerId string `json:"serverId"`
+		Name     string `json:"name"`
+	}
+	GetServerRes {
+		Id         string `json:"id"`
+		Name       string `json:"name"`
+		ImageUrl   string `json:"imageUrl"`
+		InviteCode string `json:"inviteCode"`
+		ProfileId  string `json:"profileId"`
+
+		Members  []ServerMember  `json:"members"`
+		Channels []ServerChannel `json:"channels"`
+	}
+	PostServerReq {
+		Name     string `json:"name"`
+		ImageUrl string `json:"imageUrl"`
+	}
+	PatchServerReq {
+		Id         string `json:"id"`
+		Name       string `json:"name"`
+		ImageUrl   string `json:"imageUrl"`
+		InviteCode string `json:"inviteCode"`
+		ProfileId  string `json:"profileId"`
+	}
+	DeleteServerReq {
+		Id string `json:"id"`
+	}
+)
+
+// 定義微服務 servers
+@server (
+	group: servers
+	prefix: /api/v1
+	jwt: Auth
+)
+service api {
+	@handler GetServers
+	get /server  (GetServersReq) returns ([]GetServerRes)
+	@handler GetUniqueServer
+	get /server/:serverId  (GetServerReq) returns (GetServerRes)
+	@handler PostServer
+	post /server  (PostServerReq) returns ()
+	@handler PatchServer
+	patch /server  (PatchServerReq) returns ()
+	@handler DeleteServer
+	delete /server  (DeleteServerReq) returns ()
+}
+
+type (
+	InviteMemberReq {
+		InviteCode string `json:"inviteCode"`
+	}
+	PatchMemberReq {
+		Id        string `json:"id"`
+		Role      string `json:"role"`
+		ServerId  string `json:"serverId"`
+		ProfileId string `json:"profileId"`
+	}
+	DeleteMemberReq {
+		Id       string `json:"id"`
+		ServerId string `json:"serverId"`
+	}
+)
+// 定義微服務 member
+@server (
+	group: member
+	prefix: /api/v1
+	jwt: Auth
+)
+service api {
+	@handler InviteMember
+	post /member (InviteMemberReq) returns (GetServerRes)
+	@handler PatchMember
+	patch /member (PatchMemberReq) returns (GetServerRes)
+	@handler DeleteMember
+	delete /member (DeleteMemberReq) returns (GetServerRes)
+}

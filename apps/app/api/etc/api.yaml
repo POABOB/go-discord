@@ -1,0 +1,33 @@
+Name: api
+Host: 0.0.0.0
+Port: 8888
+# 定義 JWT
+Auth:
+  AccessExpire: 86400
+  AccessSecret: '-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwBPyFAf8YbmjinxIkUfC
+3+jdvYrZICZAssJzhxhRf61ZkfzoYH47vv/bP4eXSLSmUKRKmN0nCFeS/anmEqjE
+NLtclYp1oLGsPPiUau2Q/3CwslL/oXhXXe6i3DlDtJ3KUU9KA3bMcTMlLUSDvd2A
++dBTjchUVYF8Cjs7hwjK9Qc2tetNpgDO70fXyGWYexiNWMFOYv59LFDIcMFairs/
+7DbmZUpfCLrzbguWBP/IYQyCKDiP+wrXMwIAdLNlMT8bKCF7HN9dytUh7HPYh6uL
+wrYVzSSY+7WQIQGzyxTDjZfuIkFozsXlCLXMlhZN+Yge80fr0D0ZZrxVRlNccr91
+YwIDAQAB
+-----END PUBLIC KEY-----'
+
+# 定義其他 RPC
+ProfileRpc:
+  Endpoints:
+    - 127.0.0.1:8080
+  NonBlock: true
+
+
+ServerRpc:
+  Endpoints:
+    - 127.0.0.1:8081
+  NonBlock: true
+
+MemberRpc:
+  Endpoints:
+    - 127.0.0.1:8081
+  NonBlock: true
+
